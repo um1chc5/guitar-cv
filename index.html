@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fretboard Coach</title>
+  <script>
+    // Apply the saved theme before first paint (no flash).
+    try { const th = localStorage.getItem('fretcoach.theme'); if (th) document.documentElement.dataset.theme = th; } catch {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button id="menuBtn" class="icon" data-i18n-title="menu.title">☰</button>
+      <h1><span class="logo">🎸</span> Fretboard Coach</h1>
+      <div class="badges">
+        <span id="dayStreak" class="badge fire">🔥 0</span>
+        <span id="starTotal" class="badge star">⭐ 0</span>
+      </div>
+      <div id="status" class="status" data-i18n="status.start"></div>
+      <div class="top-actions">
+        <button id="listenBtn" class="pill" data-i18n-html="btn.listen"></button>
+        <button id="playBtn" class="play" data-i18n-html="btn.play"></button>
+        <button id="camToggle" data-cam class="pill" title="Start / stop the webcam">📷 Camera</button>
+        <button id="micToggle" class="pill" data-i18n="btn.audio"></button>
+        <button id="calibrate" data-cam class="pill" title="Map the fretboard by touching 4 points">⌖ Calibrate <kbd>C</kbd></button>
+        <button id="layersBtn" class="pill" data-i18n="btn.view"></button>
+        <button id="langBtn" class="pill" data-i18n-title="btn.lang"></button>
+        <button id="themeBtn" class="icon" data-i18n-title="btn.theme">🌙</button>
+      </div>
+    </header>
+
+    <div class="stage" id="stage">
+      <canvas id="video"></canvas>
+      <div id="videoPlaceholder" class="placeholder" data-cam>
+        <p class="ph-title">Webcam AR view</p>
+        <p>Point the camera at your guitar neck so the frets are visible, start the camera,
+          then press <b>Calibrate</b> and touch 4 points with your index finger:
+          low E &amp; high e at the nut, then at the 12th fret.</p>
+        <button id="phCam" class="primary">📷 Start camera</button>
+      </div>
+
+      <div class="hud">
+        <div class="hud-tl">
+          <div class="card target-card">
+            <div class="label" data-i18n="card.target"></div>
+            <div id="target" class="big">—</div>
+            <div id="targetSub" class="sub"></div>
+          </div>
+          <div class="modes" id="modes">
+            <button data-mode="explore" class="active" data-i18n="mode.explore" data-i18n-title="mode.explore.title"></button>
+            <button data-mode="ear" data-i18n="mode.ear" data-i18n-title="mode.ear.title"></button>
+            <button data-mode="camera" data-cam title="Advance when a fingertip sits on the right fret">Finger</button>
+            <button data-mode="metronome" data-i18n="mode.metronome" data-i18n-title="mode.metronome.title"></button>
+          </div>
+        </div>
+
+        <div class="hud-tc">
+          <div id="lesson" class="card lesson" hidden>
+            <div class="lesson-head">
+              <div class="lesson-name">
+                <div id="lessonLevel" class="label"></div>
+                <h3 id="lessonTitle"></h3>
+              </div>
+              <div class="lesson-actions">
+                <button id="lessonInfo" class="icon-sm" data-i18n-title="lesson.info">ⓘ</button>
+                <button id="lessonPrev" class="icon-sm" data-i18n-title="lesson.prev">◀</button>
+                <button id="lessonNext" class="icon-sm" data-i18n-title="lesson.next">▶</button>
+              </div>
+            </div>
+            <div id="lessonBody">
+              <p id="lessonText"></p>
+              <ul id="lessonTips" class="tips"></ul>
+            </div>
+            <div id="lessonParts" class="parts">
+              <button id="part1Chip" class="part-chip" data-part="1"></button>
+              <button id="part2Chip" class="part-chip" data-part="2"></button>
+            </div>
+            <div class="steps">
+              <button id="lessonListen" class="chunky blue"></button>
+              <button id="lessonStart" class="chunky green"></button>
+              <button id="lessonDone" class="chunky orange" data-i18n="lesson.gotIt"></button>
+            </div>
+            <div class="goal">
+              <span id="lessonGoal"></span>
+              <div class="goal-bar"><div id="goalFill"></div></div>
+              <span id="lessonResult" class="sub"></span>
+            </div>
+          </div>
+          <div class="card score">
+            <div><b id="sHits">0</b><span data-i18n="score.hits"></span></div>
+            <div><b id="sMiss">0</b><span data-i18n="score.miss"></span></div>
+            <div><b id="sStreak">0</b><span data-i18n="score.streak"></span></div>
+            <div><b id="sBest">0</b><span data-i18n="score.best"></span></div>
+            <div><b id="sNpm">0</b><span data-i18n="score.npm"></span></div>
+            <div><b id="sLaps">0</b><span data-i18n="score.runs"></span></div>
+          </div>
+        </div>
+
+        <div class="hud-tr">
+          <div class="card heard-card">
+            <div class="label" data-i18n="card.heard"></div>
+            <div id="heard" class="big">—</div>
+            <div class="tuner"><div class="tuner-center"></div><div id="needle" class="needle"></div></div>
+            <div id="heardSub" class="sub" data-i18n="audio.off"></div>
+            <div class="meter"><div id="level"></div></div>
+          </div>
+          <div class="card fingers-card" data-cam>
+            <div class="label">Fingers</div>
+            <div id="fingers" class="mid">—</div>
+          </div>
+        </div>
+
+        <div id="countdown" class="countdown" hidden></div>
+        <div id="toast" class="toast"></div>
+
+        <div id="fbPanel" class="fb-panel">
+          <div id="seqStrip" class="seq-strip"></div>
+          <svg id="fretboard"></svg>
+          <div class="legend">
+            <span><i class="dot root"></i><span data-i18n="legend.root"></span></span>
+            <span><i class="dot"></i><span data-i18n="legend.note"></span></span>
+            <span><i class="dot target"></i><span data-i18n="legend.target"></span></span>
+            <span data-cam><i class="dot finger"></i>Finger</span>
+            <span data-cam><i class="dot spot"></i>Wrong place</span>
+            <span class="hint" data-i18n="legend.hint"></span>
+          </div>
+        </div>
+        <div id="playHint" class="play-hint" data-i18n-html="hint.keys"></div>
+      </div>
+
+      <div id="layers" class="popover" hidden>
+        <label class="check"><input id="showFretboard" type="checkbox" checked /> <span data-i18n="view.fretboard"></span></label>
+        <label class="check" data-cam><input id="showShape" type="checkbox" checked /> Box shape on video</label>
+        <label class="check" data-cam><input id="showGrid" type="checkbox" checked /> Fret grid on video</label>
+        <label class="check" data-cam><input id="showHands" type="checkbox" checked /> Hand skeleton</label>
+        <label class="check" data-cam><input id="mirror" type="checkbox" /> Mirror video (M)</label>
+      </div>
+
+      <aside id="drawer" class="drawer">
+        <div class="tabs" id="tabs">
+          <button data-tab="learn" class="active" data-i18n="tab.learn"></button>
+          <button data-tab="free" data-i18n="tab.free"></button>
+        </div>
+
+        <div id="tab-learn" class="tab-body">
+          <div class="overall card-flat">
+            <div class="overall-row"><b data-i18n="path.title"></b><span id="overallText" class="sub"></span></div>
+            <div class="overall-bar"><div id="overallFill"></div></div>
+          </div>
+          <button id="continueBtn" class="chunky green wide" data-i18n="path.continue"></button>
+          <div id="levels"></div>
+          <button id="resetProgress" class="link" data-i18n="path.reset"></button>
+        </div>
+
+        <div id="tab-free" class="tab-body" hidden>
+          <section>
+            <h2 data-i18n="free.pattern"></h2>
+            <label><span data-i18n="free.root"></span> <select id="root"></select></label>
+            <label><span data-i18n="free.scale"></span> <select id="pattern"></select></label>
+            <label><span data-i18n="free.position"></span> <select id="position"></select></label>
+            <div class="row">
+              <label><span data-i18n="free.from"></span> <input id="fretMin" type="number" min="0" max="15" value="0" /></label>
+              <label><span data-i18n="free.to"></span> <input id="fretMax" type="number" min="0" max="15" value="15" /></label>
+            </div>
+            <label><span data-i18n="free.labels"></span>
+              <select id="labels">
+                <option value="degree" data-i18n="free.labelDegree"></option>
+                <option value="note" data-i18n="free.labelNote"></option>
+              </select>
+            </label>
+          </section>
+        </div>
+
+        <section>
+          <h2 data-i18n="practice.title"></h2>
+          <label><span data-i18n="practice.sequence"></span> <select id="sequence"></select></label>
+          <label><span><span data-i18n="practice.tempo"></span> <span id="bpmLabel">70</span> BPM</span>
+            <input id="bpm" type="range" min="30" max="200" value="70" />
+          </label>
+          <label class="check"><input id="ignoreOctave" type="checkbox" /> <span data-i18n="practice.anyOctave"></span></label>
+          <label class="check" data-cam title="Uses the webcam to check the note was played at the highlighted spot, not the same pitch elsewhere on the neck"><input id="requirePosition" type="checkbox" checked /> Check position with camera</label>
+        </section>
+
+        <section data-cam>
+          <h2>Camera</h2>
+          <select id="camSelect"><option value="">Default camera</option></select>
+          <button id="clearCalib" class="subtle">Clear calibration</button>
+        </section>
+
+        <section>
+          <h2 data-i18n="audio.title"></h2>
+          <select id="micSelect"><option value="" data-i18n="audio.default"></option></select>
+          <label><span data-i18n="audio.channel"></span>
+            <select id="micChannel">
+              <option value="0" data-i18n="audio.in1"></option>
+              <option value="1" data-i18n="audio.in2"></option>
+              <option value="mix" data-i18n="audio.mix"></option>
+            </select>
+          </label>
+          <label><span data-i18n="audio.gate"></span>
+            <input id="gate" type="range" min="0.002" max="0.08" step="0.002" value="0.01" />
+          </label>
+        </section>
+
+        <p class="keys" data-i18n-html="keys.line"></p>
+      </aside>
+    </div>
+  </div>
+
+  <div id="setup" class="modal">
+    <div class="modal-card">
+      <div class="modal-emoji">🎸</div>
+      <h2 data-i18n="setup.title"></h2>
+      <p class="sub" data-i18n="setup.sub"></p>
+      <label class="check" data-cam><input id="useCam" type="checkbox" checked /> Webcam</label>
+      <select id="setupCam" data-cam><option value="">Default camera</option></select>
+      <label class="check"><input id="useMic" type="checkbox" checked /> <span data-i18n="setup.useMic"></span></label>
+      <div class="row">
+        <select id="setupMic"><option value="" data-i18n="audio.default"></option></select>
+        <select id="setupChannel">
+          <option value="0" data-i18n="setup.in1"></option>
+          <option value="1" data-i18n="setup.in2"></option>
+          <option value="mix" data-i18n="setup.mix"></option>
+        </select>
+      </div>
+      <p class="sub" data-i18n="setup.perm"></p>
+      <div class="modal-actions">
+        <button id="setupLang" class="link"></button>
+        <span class="spacer"></span>
+        <button id="setupSkip" class="link" data-i18n="setup.skip"></button>
+        <button id="setupStart" class="chunky green" data-i18n="setup.start"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results" class="modal" hidden>
+    <div class="modal-card results-card">
+      <button id="resClose" class="close" data-i18n-title="res.close">✕</button>
+      <div id="resEmoji" class="modal-emoji">🎉</div>
+      <h2 id="resTitle"></h2>
+      <div id="resStars" class="res-stars"></div>
+      <div id="resStats" class="res-stats">
+        <div><b id="resAcc">0%</b><span data-i18n="res.acc"></span></div>
+        <div><b id="resStreak">0</b><span data-i18n="res.streak"></span></div>
+        <div><b id="resHits">0</b><span data-i18n="res.hits"></span></div>
+      </div>
+      <p id="resHint" class="sub"></p>
+      <div class="modal-actions stack">
+        <button id="resPart2" class="chunky green wide" data-i18n="res.part2"></button>
+        <button id="resNext" class="chunky green wide" data-i18n="res.next"></button>
+        <button id="resFaster" class="chunky orange wide" data-i18n="res.faster"></button>
+        <button id="resRetry" class="chunky white wide" data-i18n="res.retry"></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
