@@ -72,6 +72,16 @@ export function candidatePositions(midi, tuning = STANDARD_TUNING) {
     .filter((p) => p.fret >= 0 && p.fret <= MAX_FRET);
 }
 
+// CAGED name of each pentatonic position, keyed by the degree it starts from on the low E string.
+// Going up the neck the shapes come in the order E, D, C, A, G.
+const MINOR_CAGED = { R: "E", "♭3": "D", 4: "C", 5: "A", "♭7": "G" };
+const CAGED = {
+  "Minor pentatonic": MINOR_CAGED,
+  Blues: MINOR_CAGED,
+  "Major pentatonic": { R: "E", 2: "D", 3: "C", 5: "A", 6: "G" },
+};
+export const cagedShape = (pattern, degree) => CAGED[pattern]?.[degree] ?? null;
+
 // Box positions: one per pattern note on the low E string, each a ~5-fret window.
 // Position 1 starts on the root; the rest follow up the neck (wrapping at the 12th fret).
 export function positionPresets(root, intervals, tuning = STANDARD_TUNING) {

@@ -13,6 +13,7 @@
   --blue: #2f7bff;    --blue-d: #1d5bd0;   --blue-l: #e6efff;
   --red: #ef4a3f;     --red-d: #c5342a;    --red-l: #fde7e5;
   --gold: #ffc21a;
+  --purple: #9b5cf6;  --purple-d: #7a3fd6;
 
   --root: var(--red);
   --note: var(--blue);
@@ -120,6 +121,7 @@ kbd {
 .chunky.green { background: var(--green); border-color: var(--green-t); color: #fff; }
 .chunky.blue { background: var(--blue); border-color: var(--blue-d); color: #fff; }
 .chunky.orange { background: var(--orange); border-color: var(--orange-t); color: #fff; }
+.chunky.purple { background: var(--purple); border-color: var(--purple-d); color: #fff; }
 .chunky.white { background: var(--surface); border-color: var(--line-strong); color: var(--ink); }
 .chunky.white.primary { background: var(--green); border-color: var(--green-t); color: #fff; }
 .chunky.stop, button.play.stop { background: var(--red); border-color: var(--red-t); color: #fff; }
@@ -232,6 +234,22 @@ button.play kbd { background: rgba(255,255,255,0.2); color: #fff; border-color: 
 .bpm-chip.active { background: var(--blue); border-color: var(--blue-d); color: #fff; border-style: solid; }
 .tempo-note { margin-top: 6px; line-height: 1.3; color: var(--green-t) !important; }
 .tempo-note.warn { color: var(--orange-t) !important; }
+
+/* reading slides */
+.read-hide { display: none !important; }
+.read-panel { display: flex; flex-direction: column; gap: 6px; border-top: 2px dashed var(--line); padding-top: 8px; }
+.read-head { display: flex; justify-content: space-between; align-items: center; }
+.read-panel h4 { margin: 0; font-size: 18px; font-weight: 900; color: var(--purple); }
+.read-panel p { margin: 0; font-size: 15px; line-height: 1.5; }
+.read-links { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 13px; color: var(--muted); }
+.read-links a { color: var(--blue); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+.read-nav { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.read-nav .chunky { padding: 8px 14px; }
+.read-nav #readNext { margin-left: auto; }
+.read-dots { display: flex; gap: 6px; flex: 1; justify-content: center; }
+.read-dot { width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 2px solid var(--line-strong); background: var(--sunken); }
+.read-dot.on { background: var(--purple); border-color: var(--purple-d); }
+.read-dot:active { transform: none; }
 
 /* lesson card */
 .lesson { display: flex; flex-direction: column; gap: 8px; padding: 12px 16px 14px; }

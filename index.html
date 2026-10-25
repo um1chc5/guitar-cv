@@ -77,16 +77,28 @@
               <p id="lessonText"></p>
               <ul id="lessonTips" class="tips"></ul>
             </div>
+            <div id="readPanel" class="read-panel" hidden>
+              <div class="read-head"><span id="readStep" class="label"></span><button id="readClose" class="icon-sm" data-i18n-title="read.close">✕</button></div>
+              <h4 id="readTitle"></h4>
+              <p id="readText"></p>
+              <div id="readLinks" class="read-links"></div>
+              <div class="read-nav">
+                <button id="readPrev" class="chunky white">◀</button>
+                <div id="readDots" class="read-dots"></div>
+                <button id="readNext" class="chunky blue"></button>
+              </div>
+            </div>
             <div id="lessonParts" class="parts">
               <button id="part1Chip" class="part-chip" data-part="1"></button>
               <button id="part2Chip" class="part-chip" data-part="2"></button>
             </div>
             <div class="steps">
+              <button id="lessonRead" class="chunky purple"></button>
               <button id="lessonListen" class="chunky blue"></button>
               <button id="lessonStart" class="chunky green"></button>
               <button id="lessonDone" class="chunky orange" data-i18n="lesson.gotIt"></button>
             </div>
-            <div class="goal">
+            <div id="lessonGoalBox" class="goal">
               <span id="lessonGoal"></span>
               <div class="goal-bar"><div id="goalFill"></div></div>
               <span id="lessonResult" class="sub"></span>

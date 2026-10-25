@@ -17,12 +17,13 @@ Open http://localhost:5173 (audio input only works on `localhost` or HTTPS). No 
 
 1. On start, the app asks for your **guitar input** (audio interface + channel, usually Input 1),
    then opens your next lesson right away. Play a note: the *Heard* card should show it.
-2. Each lesson: **🔊 Listen** first (the app plays the shape and lights each note), then the test:
+2. Each lesson: **📖 Read** when it introduces a new idea (short illustrated slides, e.g. what the
+   CAGED "E shape" is), then **🔊 Listen** (the app plays the shape and lights each note), then the test:
    - **Part 1 · Free tempo**: no metronome; the next note lights up when you play the current one.
      Play it 2 times with enough notes right → *Part 1 passed!*
    - **Part 2 · In time**: the same with the metronome at the lesson tempo, 2 times (a slightly lower
      accuracy bar, since timing is harder). Passing it completes the lesson; stars come from this part.
-   Look-only lessons (e.g. *Meet the box*) just have Listen and *Got it*.
+   Look-only lessons (e.g. *Meet the E shape*) just have Read, Listen and *Got it*.
    The path in the ☰ drawer shows done ✓, half-done (part 1 ✓) and up-next lessons (6 levels, 25 lessons).
 3. **Free practice** (☰ drawer): pick any root, scale/arpeggio and box, choose a mode
    (Explore / Free tempo / Metronome), then **L** to listen or **Space** to play along.

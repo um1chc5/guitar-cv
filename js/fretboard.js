@@ -71,7 +71,7 @@ export class Fretboard {
     }
 
     for (const n of notes) {
-      const inWin = n.fret >= windowMin && n.fret <= windowMax;
+      const inWin = n.fret >= windowMin && n.fret <= windowMax && !n.dim;
       const isTarget = target && target.string === n.string && target.fret === n.fret;
       const cls = ['fb-note', n.isRoot ? 'root' : '', inWin ? '' : 'faded', isTarget ? 'target' : ''].join(' ');
       const grp = el('g', { class: cls, transform: `translate(${this.noteX(n.fret)},${this.stringY(n.string)})` }, g);

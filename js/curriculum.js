@@ -12,32 +12,70 @@ const test = (bpm, accuracy = 0.85, timed = 0.75) => ({ bpm, accuracy, timed });
 
 export const LEVELS = [
   {
-    title: { en: 'First box', vi: 'Thế bấm đầu tiên' },
+    title: { en: 'First shape: the E shape', vi: 'Hình đầu tiên: hình E' },
     goal: {
-      en: 'Learn the most used soloing shape in rock & blues: A minor pentatonic, position 1.',
-      vi: 'Học thế bấm solo phổ biến nhất trong rock & blues: ngũ cung thứ La (A), thế 1.',
+      en: 'Learn the most used soloing shape in rock & blues: A minor pentatonic in the E shape.',
+      vi: 'Học hình solo phổ biến nhất trong rock & blues: ngũ cung thứ La (A) ở hình E.',
     },
     lessons: [
       {
         id: 'l1-see',
-        title: { en: 'Meet the box', vi: 'Làm quen thế bấm' },
+        title: { en: 'Meet the E shape', vi: 'Làm quen hình E' },
         text: {
-          en: 'This is A minor pentatonic in position 1 (frets 5–8). Red dots are the root A. Two notes per string: index finger on fret 5, ring or pinky on frets 7–8.',
-          vi: 'Đây là gam ngũ cung thứ La (A) ở thế 1 (phím 5–8). Chấm đỏ là nốt chủ A. Mỗi dây có 2 nốt: ngón trỏ ở phím 5, ngón áp út hoặc ngón út ở phím 7–8.',
+          en: 'This is A minor pentatonic in the E shape (frets 5–8). Red dots are the root A. Two notes per string: index finger on fret 5, ring or pinky on frets 7–8.',
+          vi: 'Đây là gam ngũ cung thứ La (A) ở hình E (phím 5–8). Chấm đỏ là nốt chủ A. Mỗi dây có 2 nốt: ngón trỏ ở phím 5, ngón áp út hoặc ngón út ở phím 7–8.',
         },
         tips: {
-          en: ['Press Listen to hear the shape, or click the dots.', 'Find all three A roots in the box.', 'Keep the index finger parked on fret 5.'],
-          vi: ['Bấm Nghe để nghe cả thế bấm, hoặc bấm vào từng chấm.', 'Tìm cả ba nốt chủ A trong thế bấm.', 'Giữ ngón trỏ cố định ở phím 5.'],
+          en: ['Start with 📖 Read: where the name "E shape" comes from.', 'Press Listen to hear the shape, or click the dots.', 'Keep the index finger parked on fret 5.'],
+          vi: ['Bắt đầu với 📖 Đọc: vì sao gọi là "hình E".', 'Bấm Nghe để nghe cả hình, hoặc bấm vào từng chấm.', 'Giữ ngón trỏ cố định ở phím 5.'],
         },
+        read: [
+          {
+            title: { en: 'A chord you already know', vi: 'Một hợp âm bạn đã biết' },
+            text: {
+              en: 'Open E minor. Remember its shape: the lowest note, on the 6th string, is the root (R). The other notes are the ♭3 and the 5 — the three notes of every minor chord.',
+              vi: 'Hợp âm Mi thứ (Em) dây buông. Hãy nhớ hình của nó: nốt trầm nhất, trên dây 6, là nốt chủ (R). Các nốt còn lại là ♭3 và 5 — ba nốt của mọi hợp âm thứ.',
+            },
+            view: { window: [0, 3], chord: [[0, 0, 'R'], [1, 2, '5'], [2, 2, 'R'], [3, 0, '♭3'], [4, 0, '5'], [5, 0, 'R']] },
+          },
+          {
+            title: { en: 'Slide the shape up: the E shape', vi: 'Trượt hình lên: hình E' },
+            text: {
+              en: 'Move the same shape up so your index finger bars fret 5. Now the root on the 6th string is A, so the chord is A minor. Because it is the E-minor shape moved up, it is called the E shape.',
+              vi: 'Dời cùng hình đó lên để ngón trỏ chặn phím 5. Giờ nốt chủ trên dây 6 là A, nên hợp âm là La thứ (Am). Vì đây là hình Em được dời lên, nên gọi là hình E.',
+            },
+            view: { window: [4, 8], chord: [[0, 5, 'R'], [1, 7, '5'], [2, 7, 'R'], [3, 5, '♭3'], [4, 5, '5'], [5, 5, 'R']] },
+          },
+          {
+            title: { en: 'The scale lives around the chord', vi: 'Gam nằm quanh hợp âm' },
+            text: {
+              en: 'A minor pentatonic in the E shape = the chord notes (R, ♭3, 5, bright) plus two more notes (4 and ♭7, faded). Same notes as C major pentatonic — only "home" differs.',
+              vi: 'Ngũ cung thứ La ở hình E = các nốt của hợp âm (R, ♭3, 5, sáng) cộng thêm hai nốt (4 và ♭7, mờ). Cùng các nốt với ngũ cung trưởng Đô — chỉ khác nốt "nhà".',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 1, bright: ['R', '♭3', '5'] },
+          },
+          {
+            title: { en: 'C-A-G-E-D: five shapes, one neck', vi: 'C-A-G-E-D: năm hình, một cần đàn' },
+            text: {
+              en: 'The same trick works with the open C, A, G, E and D chord shapes. Each one gives a shape of the scale, and together they cover the whole neck. You start with the E shape; Level 2 adds the other four.',
+              vi: 'Cách này áp dụng cho cả năm hình hợp âm dây buông C, A, G, E và D. Mỗi hình cho một hình của gam, và cả năm phủ kín cần đàn. Bạn bắt đầu với hình E; Cấp 2 sẽ thêm bốn hình còn lại.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 'all' },
+            links: [
+              { label: { en: 'Wikipedia: the CAGED system', vi: 'Wikipedia: hệ thống CAGED (tiếng Anh)' }, url: 'https://en.wikipedia.org/wiki/Bar_chord#CAGED_System' },
+              { label: { en: 'Wikipedia: pentatonic scale', vi: 'Wikipedia: gam ngũ cung (tiếng Anh)' }, url: 'https://en.wikipedia.org/wiki/Pentatonic_scale' },
+            ],
+          },
+        ],
         settings: { root: A, pattern: 'Minor pentatonic', position: 1, sequence: 'Ascending' },
         test: null,
       },
       {
         id: 'l1-up',
-        title: { en: 'Climb the box', vi: 'Leo lên thế bấm' },
+        title: { en: 'Climb the E shape', vi: 'Leo lên hình E' },
         text: {
-          en: 'Play the box slowly from the low A to the top. In part 1 the next note lights up once the app hears the current one; in part 2 you play along with a slow click.',
-          vi: 'Đánh chậm thế bấm từ nốt A trầm lên tới nốt cao nhất. Ở phần 1, nốt tiếp theo sáng lên khi app nghe đúng nốt hiện tại; ở phần 2 bạn đánh theo máy đếm nhịp chậm.',
+          en: 'Play the shape slowly from the low A to the top. In part 1 the next note lights up once the app hears the current one; in part 2 you play along with a slow click.',
+          vi: 'Đánh chậm hình này từ nốt A trầm lên tới nốt cao nhất. Ở phần 1, nốt tiếp theo sáng lên khi app nghe đúng nốt hiện tại; ở phần 2 bạn đánh theo máy đếm nhịp chậm.',
         },
         tips: {
           en: ['Accuracy first, speed later.', 'Mute the strings you are not playing with your palm.'],
@@ -54,8 +92,8 @@ export const LEVELS = [
           vi: 'Giờ đánh lên rồi quay xuống, không dừng lại ở nốt cao nhất.',
         },
         tips: {
-          en: ['Alternate picking: down, up, down, up.', 'If part 2 falls apart, slow down in ☰ → Tempo and build back up.'],
-          vi: ['Đánh luân phiên: xuống, lên, xuống, lên.', 'Nếu phần 2 bị rối, giảm tốc độ ở ☰ → Tempo rồi tăng dần lại.'],
+          en: ['Alternate picking: down, up, down, up.', 'If part 2 falls apart, use a slower tempo chip to practise, then come back to the lesson tempo.'],
+          vi: ['Đánh luân phiên: xuống, lên, xuống, lên.', 'Nếu phần 2 bị rối, chọn tốc độ chậm hơn để luyện, rồi quay lại tốc độ của bài.'],
         },
         settings: { root: A, pattern: 'Minor pentatonic', position: 1, sequence: 'Up & down' },
         test: test(70, 0.9),
@@ -63,46 +101,100 @@ export const LEVELS = [
     ],
   },
   {
-    title: { en: 'The whole neck', vi: 'Toàn bộ cần đàn' },
+    title: { en: 'The whole neck: CAGED', vi: 'Toàn bộ cần đàn: CAGED' },
     goal: {
-      en: 'Learn the other four pentatonic boxes and connect them, so you are never stuck in one place.',
-      vi: 'Học bốn thế ngũ cung còn lại và nối chúng với nhau, để không bị kẹt ở một chỗ.',
+      en: 'Learn the other four CAGED shapes of the pentatonic and connect them, so you are never stuck in one place.',
+      vi: 'Học bốn hình CAGED còn lại của gam ngũ cung và nối chúng với nhau, để không bị kẹt ở một chỗ.',
     },
     lessons: [
       {
         id: 'l2-map',
-        title: { en: 'The five boxes', vi: 'Năm thế bấm' },
+        title: { en: 'The five CAGED shapes', vi: 'Năm hình CAGED' },
         text: {
-          en: 'The same 5 notes repeat all over the neck. Each box overlaps the next one. Look at how position 1 connects to position 2.',
-          vi: 'Cùng 5 nốt đó lặp lại khắp cần đàn. Mỗi thế chồng lên thế kế tiếp. Hãy xem thế 1 nối với thế 2 như thế nào.',
+          en: 'The same 5 notes repeat all over the neck in five shapes: E, D, C, A and G, in that order going up. Each shape overlaps the next one. The easiest way to find a shape is its root.',
+          vi: 'Cùng 5 nốt đó lặp lại khắp cần đàn thành năm hình: E, D, C, A và G, theo thứ tự đi lên. Mỗi hình chồng lên hình kế tiếp. Cách dễ nhất để tìm một hình là nhìn nốt chủ của nó.',
         },
         tips: {
-          en: ['Switch the Position menu in Free practice to see each box.'],
-          vi: ['Đổi mục Thế bấm trong Luyện tự do để xem từng thế.'],
+          en: ['Start with 📖 Read for a tour of all five shapes.', 'In Free practice, the Position menu lists every shape.'],
+          vi: ['Bắt đầu với 📖 Đọc để xem qua cả năm hình.', 'Trong Luyện tự do, mục Thế bấm liệt kê mọi hình.'],
         },
+        read: [
+          {
+            title: { en: 'Same notes, five places', vi: 'Cùng các nốt, năm vị trí' },
+            text: {
+              en: 'Here is A minor pentatonic over the whole neck. The roots (A, bright) are your landmarks: each CAGED shape is built around a pair of them.',
+              vi: 'Đây là ngũ cung thứ La trên cả cần đàn. Các nốt chủ (A, sáng) là mốc của bạn: mỗi hình CAGED được xây quanh một cặp nốt chủ.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 'all', bright: ['R'] },
+          },
+          {
+            title: { en: 'E shape · frets 4–8', vi: 'Hình E · phím 4–8' },
+            text: {
+              en: 'You know this one. Root on the 6th string at fret 5, under the index finger.',
+              vi: 'Hình bạn đã biết. Nốt chủ trên dây 6 ở phím 5, dưới ngón trỏ.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 1 },
+          },
+          {
+            title: { en: 'D shape · frets 7–11', vi: 'Hình D · phím 7–11' },
+            text: {
+              en: 'Root on the 4th (D) string at fret 7 — like the open D-minor chord moved up. It starts where the E shape ends.',
+              vi: 'Nốt chủ trên dây 4 (dây D) ở phím 7 — giống hợp âm Rê thứ dây buông được dời lên. Hình này bắt đầu nơi hình E kết thúc.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 2 },
+          },
+          {
+            title: { en: 'C shape · frets 9–13', vi: 'Hình C · phím 9–13' },
+            text: {
+              en: 'Root on the 5th (A) string at fret 12, under the ring finger, and on the 2nd string at fret 10.',
+              vi: 'Nốt chủ trên dây 5 (dây A) ở phím 12, dưới ngón áp út, và trên dây 2 ở phím 10.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 3 },
+          },
+          {
+            title: { en: 'A shape · open position (and frets 12–15)', vi: 'Hình A · thế dây buông (và phím 12–15)' },
+            text: {
+              en: 'Root on the open 5th (A) string — the open A-minor chord. The same shape repeats an octave higher at frets 12–15.',
+              vi: 'Nốt chủ là dây 5 (dây A) buông — chính là hợp âm La thứ dây buông. Cùng hình đó lặp lại cao hơn một quãng tám ở phím 12–15.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 4 },
+          },
+          {
+            title: { en: 'G shape · frets 2–6', vi: 'Hình G · phím 2–6' },
+            text: {
+              en: 'Root on the 6th string at fret 5, but now under the pinky. Go one step higher and you are back in the E shape: the cycle repeats.',
+              vi: 'Nốt chủ trên dây 6 ở phím 5, nhưng giờ dưới ngón út. Đi lên thêm một bước là bạn trở lại hình E: vòng lặp bắt đầu lại.',
+            },
+            view: { root: 9, pattern: 'Minor pentatonic', position: 5 },
+            links: [
+              { label: { en: 'Wikipedia: the CAGED system', vi: 'Wikipedia: hệ thống CAGED (tiếng Anh)' }, url: 'https://en.wikipedia.org/wiki/Bar_chord#CAGED_System' },
+              { label: { en: 'musictheory.net: scales & chords basics', vi: 'musictheory.net: cơ bản về gam & hợp âm (tiếng Anh)' }, url: 'https://www.musictheory.net/lessons' },
+            ],
+          },
+        ],
         settings: { root: A, pattern: 'Minor pentatonic', position: 'all', sequence: 'Ascending' },
         test: null,
       },
       {
         id: 'l2-pos2',
-        title: { en: 'Box 2', vi: 'Thế 2' },
+        title: { en: 'D shape', vi: 'Hình D' },
         text: {
-          en: 'Position 2 starts on the C on the low E string (fret 8).',
-          vi: 'Thế 2 bắt đầu từ nốt C trên dây E trầm (phím 8).',
+          en: 'The D shape (position 2): root A on the 4th (D) string at fret 7. On the low E string it starts on C, fret 8.',
+          vi: 'Hình D (thế 2): nốt chủ A trên dây 4 (dây D) ở phím 7. Trên dây E trầm, hình bắt đầu từ nốt C, phím 8.',
         },
         tips: {
-          en: ['Stay inside this box — don’t slide back to box 1 for the same notes.'],
-          vi: ['Đánh trong thế này — đừng trượt về thế 1 để lấy cùng nốt.'],
+          en: ['Stay inside this shape — don’t slide back to the E shape for the same notes.'],
+          vi: ['Đánh trong hình này — đừng trượt về hình E để lấy cùng nốt.'],
         },
         settings: { root: A, pattern: 'Minor pentatonic', position: 2, sequence: 'Up & down' },
         test: test(70),
       },
       {
         id: 'l2-connect',
-        title: { en: 'Connect box 1 → 2', vi: 'Nối thế 1 → 2' },
+        title: { en: 'Connect E → D shape', vi: 'Nối hình E → D' },
         text: {
-          en: 'Play across both boxes (frets 5–10). Slide between them on the G string.',
-          vi: 'Đánh qua cả hai thế (phím 5–10). Trượt từ thế này sang thế kia trên dây G.',
+          en: 'Play across both shapes (frets 5–10). Slide from one to the other on the G string.',
+          vi: 'Đánh qua cả hai hình (phím 5–10). Trượt từ hình này sang hình kia trên dây G.',
         },
         tips: {
           en: ['Shift your hand on the way up, not in the middle of a string.'],
@@ -113,18 +205,21 @@ export const LEVELS = [
       },
       {
         id: 'l2-pos3',
-        title: { en: 'Box 3', vi: 'Thế 3' },
-        text: { en: 'Position 3 starts on D (fret 10 on the low E).', vi: 'Thế 3 bắt đầu từ nốt D (phím 10 trên dây E trầm).' },
+        title: { en: 'C shape', vi: 'Hình C' },
+        text: {
+          en: 'The C shape (position 3): root A on the 5th (A) string at fret 12, under the ring finger. On the low E string it starts on D, fret 10.',
+          vi: 'Hình C (thế 3): nốt chủ A trên dây 5 (dây A) ở phím 12, dưới ngón áp út. Trên dây E trầm, hình bắt đầu từ nốt D, phím 10.',
+        },
         tips: { en: [], vi: [] },
         settings: { root: A, pattern: 'Minor pentatonic', position: 3, sequence: 'Up & down' },
         test: test(70),
       },
       {
         id: 'l2-pos4',
-        title: { en: 'Box 4', vi: 'Thế 4' },
+        title: { en: 'A shape', vi: 'Hình A' },
         text: {
-          en: 'Position 4 starts on E — here using the open strings (frets 0–3). The same shape repeats an octave higher at frets 12–15.',
-          vi: 'Thế 4 bắt đầu từ nốt E — ở đây dùng dây buông (phím 0–3). Cùng hình đó lặp lại cao hơn một quãng tám ở phím 12–15.',
+          en: 'The A shape (position 4) — here in open position (frets 0–3), root on the open A string. The same shape repeats an octave higher at frets 12–15.',
+          vi: 'Hình A (thế 4) — ở đây là thế dây buông (phím 0–3), nốt chủ là dây A buông. Cùng hình đó lặp lại cao hơn một quãng tám ở phím 12–15.',
         },
         tips: { en: [], vi: [] },
         settings: { root: A, pattern: 'Minor pentatonic', position: 4, sequence: 'Up & down' },
@@ -132,8 +227,11 @@ export const LEVELS = [
       },
       {
         id: 'l2-pos5',
-        title: { en: 'Box 5', vi: 'Thế 5' },
-        text: { en: 'Position 5 starts on G (fret 3) and leads back into box 1.', vi: 'Thế 5 bắt đầu từ nốt G (phím 3) và dẫn về lại thế 1.' },
+        title: { en: 'G shape', vi: 'Hình G' },
+        text: {
+          en: 'The G shape (position 5): root A on the 6th string at fret 5, under the pinky. It leads straight back into the E shape.',
+          vi: 'Hình G (thế 5): nốt chủ A trên dây 6 ở phím 5, dưới ngón út. Hình này dẫn thẳng về lại hình E.',
+        },
         tips: { en: [], vi: [] },
         settings: { root: A, pattern: 'Minor pentatonic', position: 5, sequence: 'Up & down' },
         test: test(70),
@@ -144,7 +242,7 @@ export const LEVELS = [
     title: { en: 'Blues & major sound', vi: 'Blues & âm trưởng' },
     goal: {
       en: 'Add the blue note, and discover that the same shapes give you a happy major sound.',
-      vi: 'Thêm nốt blue, và khám phá rằng cùng thế bấm đó cho bạn âm trưởng vui tươi.',
+      vi: 'Thêm nốt blue, và khám phá rằng cùng hình đó cho bạn âm trưởng vui tươi.',
     },
     lessons: [
       {
@@ -206,8 +304,8 @@ export const LEVELS = [
           vi: 'La thứ = A, C, E (R, ♭3, 5). Kết câu bằng các nốt này nghe "đúng" khi đệm hợp âm Am.',
         },
         tips: {
-          en: ['Compare with the pentatonic box: all three notes are already inside it.'],
-          vi: ['So với thế ngũ cung: cả ba nốt đều đã nằm trong đó.'],
+          en: ['Compare with the pentatonic E shape: all three notes are already inside it.'],
+          vi: ['So với hình E của ngũ cung: cả ba nốt đều đã nằm trong đó.'],
         },
         settings: { root: A, pattern: 'Minor triad', position: 1, sequence: 'Up & down' },
         test: test(70),
@@ -343,7 +441,7 @@ export const LEVELS = [
         title: { en: 'Random notes', vi: 'Nốt ngẫu nhiên' },
         text: {
           en: 'Notes come in random order. This trains you to see the shape instead of memorising a run.',
-          vi: 'Các nốt đến theo thứ tự ngẫu nhiên. Bài này luyện bạn nhìn thấy thế bấm thay vì học thuộc một đường chạy.',
+          vi: 'Các nốt đến theo thứ tự ngẫu nhiên. Bài này luyện bạn nhìn thấy hình của gam thay vì học thuộc một đường chạy.',
         },
         tips: { en: [], vi: [] },
         settings: { root: A, pattern: 'Minor pentatonic', position: 1, sequence: 'Random' },
@@ -353,12 +451,12 @@ export const LEVELS = [
         id: 'l6-e',
         title: { en: 'Another key: E minor', vi: 'Giọng khác: Mi thứ' },
         text: {
-          en: 'Move the box: E minor pentatonic in open position. It is the box-1 shape you know from fret 5, slid down so the nut plays the index-finger notes.',
-          vi: 'Dời thế bấm: ngũ cung thứ Mi (E) ở thế dây buông. Đó là hình thế 1 bạn đã biết ở phím 5, trượt xuống để dây buông thay cho ngón trỏ.',
+          en: 'Move the shape: E minor pentatonic in open position. It is the E shape you know from fret 5, slid down so the open strings play the index-finger notes.',
+          vi: 'Dời hình: ngũ cung thứ Mi (E) ở thế dây buông. Đó là hình E bạn đã biết ở phím 5, trượt xuống để dây buông thay cho ngón trỏ.',
         },
         tips: {
           en: ['Every shape you learned moves to any key by sliding it.'],
-          vi: ['Mọi thế bấm bạn đã học đều chuyển sang giọng khác bằng cách trượt nó.'],
+          vi: ['Mọi hình bạn đã học đều chuyển sang giọng khác bằng cách trượt nó.'],
         },
         settings: { root: E, pattern: 'Minor pentatonic', position: 1, sequence: 'Up & down' },
         test: test(80),

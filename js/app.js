@@ -1,8 +1,8 @@
 // UI wiring: learning path, two-part lesson tests, free practice, audio (+ optional camera) input.
 
 import {
-  NOTE_NAMES, PATTERNS, SEQUENCES, STRING_NAMES, MAX_FRET,
-  findPattern, patternNotes, positionPresets, scaleRun, buildSequence, candidatePositions,
+  NOTE_NAMES, PATTERNS, SEQUENCES, STRING_NAMES, STANDARD_TUNING, MAX_FRET,
+  findPattern, patternNotes, positionPresets, scaleRun, buildSequence, candidatePositions, cagedShape,
   midiToName, midiToNameOctave,
 } from './theory.js';
 import { Fretboard } from './fretboard.js';
@@ -259,7 +259,11 @@ function refreshPositions(resetToFirst = false) {
   const presets = positionPresets(state.root, findPattern(state.pattern));
   const items = [
     { label: t('free.wholeNeck'), value: 'all' },
-    ...presets.map((p, i) => ({ label: t('free.pos', { n: i + 1, fret: p.fret, degree: p.degree }), value: String(i + 1) })),
+    ...presets.map((p, i) => {
+      const shape = cagedShape(state.pattern, p.degree);
+      const vars = { n: i + 1, fret: p.fret, degree: p.degree, shape };
+      return { label: t(shape ? 'free.posCaged' : 'free.pos', vars), value: String(i + 1) };
+    }),
     { label: t('free.custom'), value: 'custom' },
   ];
   if (resetToFirst && state.position !== 'all' && state.position !== 'custom') state.position = '1';
@@ -327,6 +331,10 @@ function initLearn() {
   $('lessonPrev').onclick = () => stepLesson(-1);
   $('lessonDone').onclick = () => { stopPlay(true); completeLesson(1); showResults('complete', 1, null); };
   $('lessonListen').onclick = startListen;
+  $('lessonRead').onclick = startRead;
+  $('readClose').onclick = () => endRead();
+  $('readPrev').onclick = () => stepRead(-1);
+  $('readNext').onclick = () => stepRead(1);
   $('lessonStart').onclick = () => (practice.running || (countdown.active && !demo.pending) ? stopPlay() : startPlay());
   for (const chip of [$('part1Chip'), $('part2Chip')]) chip.onclick = () => { stopPlay(true); setLessonPart(+chip.dataset.part); };
   $('resRetry').onclick = () => { closeResults(); startPlay(); };
@@ -416,7 +424,9 @@ function openLesson(id) {
   $('tab-free').hidden = true;
   $('lesson').hidden = false;
   $('lessonBody').hidden = false;
+  reading.active = false;
   applyLessonPart();
+  if (lesson.read && !isDone(p)) startRead();
   renderLevels();
   if (narrow()) setDrawer(false, false);
 }
@@ -445,6 +455,7 @@ function renderLessonCard() {
   $('lessonText').textContent = L(l.text);
   $('lessonTips').replaceChildren(...L(l.tips).map((tip) => Object.assign(document.createElement('li'), { textContent: tip })));
   $('lessonDone').hidden = !!l.test;
+  $('lessonRead').hidden = !l.read;
   $('lessonParts').hidden = !l.test;
   if (l.test) {
     const c1 = $('part1Chip');
@@ -571,6 +582,10 @@ function requestRender() {
   renderQueued = true;
   requestAnimationFrame(() => {
     renderQueued = false;
+    if (reading.active) {
+      fretboard.render(readOverlay());
+      return;
+    }
     const overlay = {
       notes: state.notes,
       windowMin: state.fretMin,
@@ -598,11 +613,14 @@ function renderHud() {
   const l = lessonState.active;
   const testing = practice.running || (countdown.active && !demo.pending);
   const startLabel = !l?.test ? t('lesson.try') : t('lesson.startPart', { n: lessonState.part });
-  $('lessonStart').innerHTML = `<span class="step-n">2</span><span></span>`;
+  const n0 = l?.read ? 1 : 0;
+  $('lessonRead').innerHTML = `<span class="step-n">1</span><span></span>`;
+  $('lessonRead').lastChild.textContent = t('lesson.read');
+  $('lessonStart').innerHTML = `<span class="step-n">${n0 + 2}</span><span></span>`;
   $('lessonStart').lastChild.textContent = testing ? t('lesson.stop') : startLabel;
   $('lessonStart').classList.toggle('stop', testing);
   const listening = demo.active || demo.pending;
-  $('lessonListen').innerHTML = `<span class="step-n">1</span><span></span>`;
+  $('lessonListen').innerHTML = `<span class="step-n">${n0 + 1}</span><span></span>`;
   $('lessonListen').lastChild.textContent = listening ? t('lesson.stop') : t('lesson.listen');
   $('lessonListen').classList.toggle('stop', listening);
 
@@ -814,6 +832,7 @@ function countIn(onGo, goClick = true) {
 
 function startPlay() {
   closeResults();
+  if (reading.active) endRead();
   stopDemo();
   if (practice.mode === 'explore') setMode(pitch.running ? 'ear' : 'metronome');
   if (practice.mode === 'camera' && !camera.mapper) { status('Finger mode needs the camera + neck calibration (C).'); return; }
@@ -835,6 +854,76 @@ function stopPlay(quiet = false) {
   renderHud();
 }
 
+// ---- read: short illustrated explanation slides before a new concept -----------------
+
+const reading = { active: false, index: 0 };
+const slides = () => lessonState.active?.read || [];
+
+function startRead() {
+  if (!slides().length) return;
+  stopPlay(true);
+  closeResults();
+  reading.active = true;
+  reading.index = 0;
+  renderRead();
+}
+
+function endRead(next = false) {
+  reading.active = false;
+  renderRead();
+  if (next) status(t('st.afterRead'));
+}
+
+function stepRead(dir) {
+  const i = reading.index + dir;
+  if (i >= slides().length) { endRead(true); return; }
+  reading.index = Math.max(0, i);
+  renderRead();
+}
+
+function renderRead() {
+  const on = reading.active;
+  $('readPanel').hidden = !on;
+  for (const id of ['lessonBody', 'lessonParts', 'lessonGoalBox']) $(id).classList.toggle('read-hide', on);
+  document.querySelector('.steps').classList.toggle('read-hide', on);
+  if (on) {
+    const all = slides();
+    const sl = all[reading.index];
+    $('readStep').textContent = t('read.step', { i: reading.index + 1, n: all.length });
+    $('readTitle').textContent = L(sl.title);
+    $('readText').textContent = L(sl.text);
+    const links = sl.links || [];
+    $('readLinks').hidden = !links.length;
+    $('readLinks').replaceChildren(...(links.length ? [Object.assign(document.createElement('span'), { textContent: t('read.more') })] : []),
+      ...links.map((lk) => Object.assign(document.createElement('a'), { href: lk.url, target: '_blank', rel: 'noopener noreferrer', textContent: `${L(lk.label)} ↗` })));
+    $('readDots').replaceChildren(...all.map((_, i) => {
+      const d = document.createElement('button');
+      d.className = `read-dot${i === reading.index ? ' on' : ''}`;
+      d.title = L(all[i].title);
+      d.onclick = () => { reading.index = i; renderRead(); };
+      return d;
+    }));
+    $('readPrev').disabled = reading.index === 0;
+    $('readNext').textContent = reading.index === all.length - 1 ? t('read.done') : t('read.next');
+  }
+  requestRender();
+}
+
+// A slide shows either an explicit chord shape or a scale shape (some degrees bright, the rest faded).
+function readOverlay() {
+  const v = slides()[reading.index].view;
+  if (v.chord) {
+    const notes = v.chord.map(([string, fret, degree]) => ({ string, fret, degree, midi: STANDARD_TUNING[string] + fret, isRoot: degree === 'R' }));
+    return { notes, windowMin: v.window[0], windowMax: v.window[1], labelMode: 'degree' };
+  }
+  const intervals = findPattern(v.pattern);
+  const notes = patternNotes(v.root, intervals).map((n) => ({ ...n, dim: !!v.bright && !v.bright.includes(n.degree) }));
+  let [min, max] = [0, MAX_FRET];
+  if (typeof v.position === 'number') ({ min, max } = positionPresets(v.root, intervals)[v.position - 1]);
+  else if (typeof v.position === 'object') ({ min, max } = v.position);
+  return { notes, windowMin: min, windowMax: max, labelMode: 'degree' };
+}
+
 // ---- listen: the app plays the sequence and lights each note ------------------------
 
 const demo = { active: false, pending: false, index: -1, timers: [] };
@@ -850,6 +939,7 @@ function stopDemo() {
 
 function startListen() {
   if (demo.active || demo.pending) { stopPlay(); return; }
+  if (reading.active) endRead();
   stopPlay(true);
   const seq = practice.sequence;
   if (!seq.length) return;
@@ -917,6 +1007,7 @@ function toggleLang() {
   renderLessonCard();
   renderTempo();
   renderHud();
+  if (reading.active) renderRead();
   status(modeHint(practice.mode));
 }
 
@@ -978,6 +1069,8 @@ document.addEventListener('keydown', (e) => {
     if (k === 'escape') closeResults();
     return; // Space / Enter press the focused result button
   }
+  if (reading.active && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { stepRead(e.key === 'ArrowRight' ? 1 : -1); return; }
+  if (reading.active && k === 'escape') { endRead(); return; }
   if (k === ' ') { e.preventDefault(); e.target.blur?.(); togglePlay(); }
   else if (k === 'c' && CAMERA_FEATURES) toggleCalibration();
   else if (k === 'escape') {

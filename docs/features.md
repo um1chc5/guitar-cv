@@ -25,8 +25,9 @@ because interfaces put the guitar on one channel only. *Start* or *Skip* both op
   - **Arpeggios:** major, minor, diminished, augmented, maj7, m7, dom7, m7♭5, dim7.
 - Standard tuning (E A D G B E), frets 0–15.
 - Labels: scale degrees (R, ♭3, 5 …) or note names.
-- **Positions:** box presets start from each pattern note on the low E string (≈ the 5 pentatonic
-  boxes), or the whole neck, or a custom fret range.
+- **Positions:** presets start from each pattern note on the low E string, or the whole neck, or a
+  custom fret range. Pentatonic / blues positions are named by CAGED (*E shape · pos 1 (fret 5)*) —
+  see [lessons.md](lessons.md#shapes-caged-names).
 - **Sequences:** ascending, descending, up & down, groups of 3, groups of 4, random.
 
 ## Fretboard diagram (`js/fretboard.js`)
@@ -47,6 +48,7 @@ chords. *Accept any octave* is available for players whose guitar sits an octave
 - **Free tempo** — advances when the right note is heard.
 - **Metronome** — the target moves on every click; each beat is judged hit or miss.
 - **Listen** — the app plays the sequence and lights the notes (not scored).
+- **Read** — illustrated slides in lessons that introduce a new idea (see [lessons.md](lessons.md)).
 - Stats: hits, misses, streak, best, notes/min, runs.
 
 ## Tempo card
