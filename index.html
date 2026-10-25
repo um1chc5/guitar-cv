@@ -110,6 +110,17 @@
             <div id="heardSub" class="sub" data-i18n="audio.off"></div>
             <div class="meter"><div id="level"></div></div>
           </div>
+          <div class="card tempo-card">
+            <div class="tempo-head"><span class="label" data-i18n="tempo.title"></span><span id="tempoTarget" class="tempo-target" hidden></span></div>
+            <div class="tempo-row">
+              <button id="bpmDown" class="icon-sm" data-i18n-title="tempo.down">−5</button>
+              <div class="bpm-num"><b id="bpmLabel">70</b><small>BPM</small></div>
+              <button id="bpmUp" class="icon-sm" data-i18n-title="tempo.up">+5</button>
+            </div>
+            <div class="bpm-slider"><input id="bpm" type="range" min="30" max="200" value="70" /><i id="bpmMark" hidden></i></div>
+            <div id="bpmChips" class="bpm-chips"></div>
+            <div id="tempoNote" class="sub tempo-note" hidden></div>
+          </div>
           <div class="card fingers-card" data-cam>
             <div class="label">Fingers</div>
             <div id="fingers" class="mid">—</div>
@@ -180,9 +191,6 @@
         <section>
           <h2 data-i18n="practice.title"></h2>
           <label><span data-i18n="practice.sequence"></span> <select id="sequence"></select></label>
-          <label><span><span data-i18n="practice.tempo"></span> <span id="bpmLabel">70</span> BPM</span>
-            <input id="bpm" type="range" min="30" max="200" value="70" />
-          </label>
           <label class="check"><input id="ignoreOctave" type="checkbox" /> <span data-i18n="practice.anyOctave"></span></label>
           <label class="check" data-cam title="Uses the webcam to check the note was played at the highlighted spot, not the same pitch elsewhere on the neck"><input id="requirePosition" type="checkbox" checked /> Check position with camera</label>
         </section>

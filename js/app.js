@@ -187,14 +187,50 @@ function initControls() {
     btn.onclick = () => setMode(btn.dataset.mode);
   }
   $('bpm').oninput = (e) => setBpm(+e.target.value);
+  $('bpmDown').onclick = () => setBpm(practice.bpm - 5);
+  $('bpmUp').onclick = () => setBpm(practice.bpm + 5);
   $('ignoreOctave').onchange = (e) => { practice.ignoreOctave = e.target.checked; };
   $('requirePosition').onchange = (e) => { practice.requirePosition = e.target.checked; };
 }
 
+const BPM_MIN = 30;
+const BPM_MAX = 200;
+const BPM_CHIPS = [60, 70, 80, 100, 120];
+
 function setBpm(bpm) {
+  bpm = Math.max(BPM_MIN, Math.min(BPM_MAX, Math.round(bpm)));
   $('bpm').value = bpm;
   $('bpmLabel').textContent = bpm;
   practice.setBpm(bpm);
+  renderTempo();
+}
+
+// The lesson tempo only matters in part 2 (in time): slower runs are practice and don't pass.
+const lessonTempo = () => (lessonState.active?.test && lessonState.part === 2 ? lessonState.active.test.bpm : null);
+
+function renderTempo() {
+  const bpm = practice.bpm;
+  const target = lessonTempo();
+  const values = [...new Set([...BPM_CHIPS, ...(target ? [target] : [])])].sort((a, b) => a - b);
+  $('bpmChips').replaceChildren(...values.map((v) => {
+    const b = document.createElement('button');
+    b.className = 'bpm-chip';
+    b.textContent = v;
+    b.classList.toggle('active', v === bpm);
+    b.classList.toggle('target', v === target);
+    b.classList.toggle('below', !!target && v < target);
+    if (target && v < target) b.title = t('tempo.practiceOnly');
+    b.onclick = () => setBpm(v);
+    return b;
+  }));
+  $('bpmMark').hidden = !target;
+  if (target) $('bpmMark').style.left = `${((target - BPM_MIN) / (BPM_MAX - BPM_MIN)) * 100}%`;
+  $('tempoTarget').hidden = !target;
+  $('tempoTarget').textContent = target ? t('tempo.target', { bpm: target }) : '';
+  const note = $('tempoNote');
+  note.hidden = !target;
+  note.classList.toggle('warn', !!target && bpm < target);
+  if (target) note.textContent = bpm < target ? t('tempo.below', { bpm: target }) : t('tempo.ok');
 }
 
 // Load a preset (from a lesson) into the controls.
@@ -274,6 +310,7 @@ function setMode(mode) {
     lessonState.part = mode === 'metronome' ? 2 : 1;
     renderLessonCard();
   }
+  renderTempo();
   status(modeHint(mode));
 }
 
@@ -427,6 +464,7 @@ function renderLessonCard() {
   const idx = ALL_LESSONS.indexOf(ALL_LESSONS.find((x) => x.id === l.id));
   $('lessonPrev').disabled = idx === 0;
   $('lessonNext').disabled = idx === ALL_LESSONS.length - 1;
+  renderTempo();
   renderHud();
   renderLessonResult();
 }
@@ -877,6 +915,7 @@ function toggleLang() {
   renderAudioButton();
   renderSeqStrip();
   renderLessonCard();
+  renderTempo();
   renderHud();
   status(modeHint(practice.mode));
 }
@@ -962,6 +1001,7 @@ initView();
 initSetup();
 renderBadges();
 renderAudioButton();
+renderTempo();
 renderHud();
 status(t('status.start'));
 window.fretcoach = { state, practice, pitch, camera, lessonState }; // for debugging in devtools

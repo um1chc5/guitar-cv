@@ -211,6 +211,28 @@ button.play kbd { background: rgba(255,255,255,0.2); color: #fff; border-color: 
 #sMiss { color: var(--red); }
 #sStreak { color: var(--orange-t); }
 
+/* tempo card */
+.tempo-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.tempo-target { font-size: 11px; font-weight: 900; color: var(--orange-t); background: var(--orange-l); border: 1.5px solid var(--orange-b); border-radius: 999px; padding: 0 7px; }
+.tempo-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin: 2px 0; }
+.bpm-num { display: flex; align-items: baseline; gap: 4px; }
+.bpm-num b { font-size: 30px; font-weight: 900; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.bpm-num small { font-size: 11px; font-weight: 900; color: var(--muted); }
+.tempo-row button { min-width: 38px; }
+.bpm-slider { position: relative; padding: 2px 0; }
+.bpm-slider input { display: block; margin: 0; }
+#bpmMark {
+  position: absolute; top: -2px; bottom: -2px; width: 3px; margin-left: -1.5px; border-radius: 2px;
+  background: var(--orange); pointer-events: none;
+}
+.bpm-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.bpm-chip { flex: 1; min-width: 0; padding: 3px 0; font-size: 12px; border-radius: 9px; border-width: 2px; border-bottom-width: 3px; }
+.bpm-chip.below { color: var(--muted); border-style: dashed; border-bottom-style: dashed; }
+.bpm-chip.target { border-color: var(--orange-b); color: var(--orange-t); }
+.bpm-chip.active { background: var(--blue); border-color: var(--blue-d); color: #fff; border-style: solid; }
+.tempo-note { margin-top: 6px; line-height: 1.3; color: var(--green-t) !important; }
+.tempo-note.warn { color: var(--orange-t) !important; }
+
 /* lesson card */
 .lesson { display: flex; flex-direction: column; gap: 8px; padding: 12px 16px 14px; }
 .lesson-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
