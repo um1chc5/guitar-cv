@@ -3,7 +3,7 @@
 Learn guitar solo vocabulary (scales, arpeggios, box positions) with your **guitar signal**
 (audio interface). The fretboard shows the shape and the next note; a pitch detector checks what you played.
 
-See [docs/idea.md](docs/idea.md) for the full concept and roadmap.
+Docs: [docs/](docs/README.md) — product, lessons, features, [tech stack](docs/tech-stack.md), architecture, camera, roadmap.
 
 ## Run
 
